@@ -1,24 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
+import { RouterProvider, createBrowserRouter, Router, Route, useRoutes, Switch } from 'react-router-dom';
+import routes from './routes';
+import Loading from './components/Loading';
+import { Suspense } from 'react';
 
 function App() {
+  const router = createBrowserRouter(routes);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Suspense fallback={<Loading />}>
+        <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />
+      </Suspense>
   );
 }
 
