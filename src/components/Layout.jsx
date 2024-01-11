@@ -26,7 +26,7 @@ const App = () => {
           onClick={toggleMenu}
           />
       </Header>
-      <Content style={{height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden', backgroundColor: 'white', margin: '20px 30px'}}>
+      <Content style={{height: 'calc(100vh - 64px)', overflowY: 'auto', overflowX: 'hidden', backgroundColor: 'white', padding: '20px 30px'}}>
         <Outlet />
       </Content>
     </Layout>

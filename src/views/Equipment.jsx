@@ -264,7 +264,8 @@ const Equipment = () => {
   // 列表中最新的id，确保不会重复
   const newId = useRef(22);
   // 正在编辑的数据
-  const editRecord = useRef({});
+  // const editRecord = useRef({});
+  const [editRecord, setEditRecord] = useState({});
   // 展示的数据
   const [tableData, setTableData] = useState({list: [], total: 0});
   // 搜索表单
@@ -292,7 +293,7 @@ const Equipment = () => {
   // 编辑
   const edit = record => {
     setShowModal(true);
-    editRecord.current = {...record};
+    setEditRecord({...record});
     form.setFieldsValue(record);
   };
 
@@ -337,10 +338,10 @@ const Equipment = () => {
   const ok = async () => {
     try {
       const formValue = await form.validateFields();
-      if (editRecord.current.id) {
+      if (editRecord.id) {
         // 编辑逻辑
-        const index = originalData.current.findIndex(v => v.id === editRecord.current.id);
-        originalData.current.splice(index, 1, {...editRecord.current, ...formValue});
+        const index = originalData.current.findIndex(v => v.id === editRecord.id);
+        originalData.current.splice(index, 1, {...editRecord, ...formValue});
       } else {
         // 新增逻辑
         const obj = { id: newId.current + 1, ...formValue, installTime: formatDate(Date.now())};
@@ -348,8 +349,8 @@ const Equipment = () => {
         newId.current += 1;
       }
       form.resetFields();
-      setShowModal(false);
       getList();
+      cancel();
     } catch (error) {
       console.log(error)
     }
@@ -359,6 +360,7 @@ const Equipment = () => {
   const cancel = () => {
     form.resetFields();
     setShowModal(false);
+    setEditRecord({});
   };
 
   // 副作用函数，pagination改变时，重新获取表格显示的数据
@@ -368,7 +370,7 @@ const Equipment = () => {
 
 
   return (
-    <>
+    <div style={{width: '100%', height: 'calc(100% - 20px)'}}>
       <div style={{display: 'flex', justifyContent: 'space-between'}}>
         <Form layout="inline" style={{height: '60px'}} onValuesChange={search}>
           <Form.Item label="设备编号" name="equipmentNumber">
@@ -403,50 +405,48 @@ const Equipment = () => {
           style={{marginTop: '20px'}}
         />
       </div>
-      <div>
-        <Modal
-          title="新建"
-          width={600}
-          open={showModal}
-          onOk={ok}
-          onCancel={cancel}
+      <Modal
+        title={editRecord.id ? '编辑' : '新建'}
+        width={600}
+        open={showModal}
+        onOk={ok}
+        onCancel={cancel}
+      >
+        <Form
+          form={form}
+          style={{marginRight: '100px'}}
+          labelCol={{span: 8}}
+          wrapperCol={{span: 16}}
         >
-          <Form
-            form={form}
-            style={{marginRight: '100px'}}
-            labelCol={{span: 8}}
-            wrapperCol={{span: 16}}
+          <Form.Item
+            name="equipmentNumber"
+            label="设备编号"
           >
-            <Form.Item
-              name="equipmentNumber"
-              label="设备编号"
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="equipmentName"
-              label="设备名"
-              rules={[{required: true, message: '请输入设备名！'}]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="workshop"
-              label="所属车间"
-              rules={[{required: true, message: '请输入所属车间！'}]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item name="equipmentMN" label="设备型号">
-              <Input />
-            </Form.Item>
-            <Form.Item name="manufacturers" label="生产厂家">
-              <Input />
-            </Form.Item>
-          </Form>
-        </Modal>
-      </div>
-    </>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="equipmentName"
+            label="设备名"
+            rules={[{required: true, message: '请输入设备名！'}]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="workshop"
+            label="所属车间"
+            rules={[{required: true, message: '请输入所属车间！'}]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item name="equipmentMN" label="设备型号">
+            <Input />
+          </Form.Item>
+          <Form.Item name="manufacturers" label="生产厂家">
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </div>
   )
 }
 
