@@ -1,5 +1,6 @@
-import { Table, Input, Form, Button, Pagination } from "antd";
+import { Table, Input, Form, Button, Pagination, Modal } from "antd";
 import { useState, useEffect, useRef } from "react";
+import { formatDate } from "../utils/utils";
 
 
 const Equipment = () => {
@@ -51,7 +52,7 @@ const Equipment = () => {
       key: 'action',
       render: (_, item) => (
         <span>
-          <Button type="link" onClick={() => edit(item.id)}>编辑</Button>
+          <Button type="link" onClick={() => edit(item)}>编辑</Button>
           <span>|</span>
           <Button type="link" onClick={() => del(item.id)}>删除</Button>
         </span>
@@ -62,247 +63,267 @@ const Equipment = () => {
   // 初始数据，模拟数据库
   const originalData = useRef([
     {
-      id: 1,
-      equipmentNumber: 'YT-1234567',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:01:01',
+        "id": 22,
+        "equipmentNumber": "YT-1234568",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:16:21"
     },
     {
-      id: 2,
-      equipmentNumber: 'YT-1234568',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:16:21',
+        "id": 21,
+        "equipmentNumber": "YT-1234568",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:16:21"
     },
     {
-      id: 3,
-      equipmentNumber: 'JQ46676',
-      equipmentName: 'Hurco车削中心机械臂',
-      workshop: '上海市浦东新区沪城环路1111号',
-      equipmentMN: 'TX90',
-      manufacturers: '',
-      installTime: '2020-12-12 09:34:56',
+        "id": 20,
+        "equipmentNumber": "YT-1234568",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:16:21"
     },
     {
-      id: 4,
-      equipmentNumber: 'JQ46677',
-      equipmentName: '产线移动机械臂',
-      workshop: '上海市浦东新区沪城环路1111号',
-      equipmentMN: 'TX160',
-      manufacturers: '',
-      installTime: '2020-12-12 11:21:30',
+        "id": 19,
+        "equipmentNumber": "YT-1234568",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:16:21"
     },
     {
-      id: 5,
-      equipmentNumber: 'JQ47262',
-      equipmentName: 'Schaublin车铣复合中心机械臂',
-      workshop: '上海市浦东新区沪城环路1111号',
-      equipmentMN: 'TX90',
-      manufacturers: '',
-      installTime: '2020-12-12 15:26:41',
+        "id": 18,
+        "equipmentNumber": "YT-1234568",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:16:21"
     },
     {
-      id: 6,
-      equipmentNumber: 'JQ4493',
-      equipmentName: 'agv小车',
-      workshop: '上海市浦东新区沪城环路1111号',
-      equipmentMN: '',
-      manufacturers: '',
-      installTime: '2020-12-12 16:37:28',
+        "id": 17,
+        "equipmentNumber": "YT-1234568",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:16:21"
     },
     {
-      id: 7,
-      equipmentNumber: 'JQ25',
-      equipmentName: '三坐标',
-      workshop: '上海市浦东新区沪城环路1111号',
-      equipmentMN: '',
-      manufacturers: '',
-      installTime: '2020-12-13 10:42:15',
+        "id": 16,
+        "equipmentNumber": "YT-1234568",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:16:21"
     },
     {
-      id: 8,
-      equipmentNumber: 'JQ344939',
-      equipmentName: 'Schaublin136 7AX-Y车铣复合中心',
-      workshop: '上海市浦东新区沪城环路1111号',
-      equipmentMN: '',
-      manufacturers: '',
-      installTime: '2020-12-13 15:36:51',
+        "id": 15,
+        "equipmentNumber": "YT-1234568",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:16:21"
     },
     {
-      id: 9,
-      equipmentNumber: 'JQ344940',
-      equipmentName: 'Hurco TMM10i车削中心',
-      workshop: '上海市浦东新区沪城环路1111号',
-      equipmentMN: '',
-      manufacturers: '',
-      installTime: '2020-12-12 09:34:56',
+        "id": 14,
+        "equipmentNumber": "YT-1234568",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:16:21"
     },
     {
-      id: 10,
-      equipmentNumber: 'JQ344941',
-      equipmentName: 'Hurco VMX42i加工中心',
-      workshop: '上海市浦东新区沪城环路1111号',
-      equipmentMN: '',
-      manufacturers: '',
-      installTime: '2020-12-12 09:34:56',
+        "id": 13,
+        "equipmentNumber": "YT-1234568",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:16:21"
     },
     {
-      id: 11,
-      equipmentNumber: 'JQ344942',
-      equipmentName: '科恩Micro',
-      workshop: '上海市浦东新区沪城环路1111号',
-      equipmentMN: '',
-      manufacturers: '',
-      installTime: '2020-12-12 09:34:56',
+        "id": 12,
+        "equipmentNumber": "YT-1234568",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:16:21"
     },
     {
-      id: 12,
-      equipmentNumber: 'YT-1234568',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:16:21',
+        "id": 11,
+        "equipmentNumber": "JQ344942",
+        "equipmentName": "科恩Micro",
+        "workshop": "上海市浦东新区沪城环路1111号",
+        "equipmentMN": "",
+        "manufacturers": "",
+        "installTime": "2020-12-12 09:34:56"
     },
     {
-      id: 13,
-      equipmentNumber: 'YT-1234568',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:16:21',
+        "id": 10,
+        "equipmentNumber": "JQ344941",
+        "equipmentName": "Hurco VMX42i加工中心",
+        "workshop": "上海市浦东新区沪城环路1111号",
+        "equipmentMN": "",
+        "manufacturers": "",
+        "installTime": "2020-12-12 09:34:56"
     },
     {
-      id: 14,
-      equipmentNumber: 'YT-1234568',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:16:21',
+        "id": 9,
+        "equipmentNumber": "JQ344940",
+        "equipmentName": "Hurco TMM10i车削中心",
+        "workshop": "上海市浦东新区沪城环路1111号",
+        "equipmentMN": "",
+        "manufacturers": "",
+        "installTime": "2020-12-12 09:34:56"
     },
     {
-      id: 15,
-      equipmentNumber: 'YT-1234568',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:16:21',
+        "id": 8,
+        "equipmentNumber": "JQ344939",
+        "equipmentName": "Schaublin136 7AX-Y车铣复合中心",
+        "workshop": "上海市浦东新区沪城环路1111号",
+        "equipmentMN": "",
+        "manufacturers": "",
+        "installTime": "2020-12-13 15:36:51"
     },
     {
-      id: 16,
-      equipmentNumber: 'YT-1234568',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:16:21',
+        "id": 7,
+        "equipmentNumber": "JQ25",
+        "equipmentName": "三坐标",
+        "workshop": "上海市浦东新区沪城环路1111号",
+        "equipmentMN": "",
+        "manufacturers": "",
+        "installTime": "2020-12-13 10:42:15"
     },
     {
-      id: 17,
-      equipmentNumber: 'YT-1234568',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:16:21',
+        "id": 6,
+        "equipmentNumber": "JQ4493",
+        "equipmentName": "agv小车",
+        "workshop": "上海市浦东新区沪城环路1111号",
+        "equipmentMN": "",
+        "manufacturers": "",
+        "installTime": "2020-12-12 16:37:28"
     },
     {
-      id: 18,
-      equipmentNumber: 'YT-1234568',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:16:21',
+        "id": 5,
+        "equipmentNumber": "JQ47262",
+        "equipmentName": "Schaublin车铣复合中心机械臂",
+        "workshop": "上海市浦东新区沪城环路1111号",
+        "equipmentMN": "TX90",
+        "manufacturers": "",
+        "installTime": "2020-12-12 15:26:41"
     },
     {
-      id: 19,
-      equipmentNumber: 'YT-1234568',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:16:21',
+        "id": 4,
+        "equipmentNumber": "JQ46677",
+        "equipmentName": "产线移动机械臂",
+        "workshop": "上海市浦东新区沪城环路1111号",
+        "equipmentMN": "TX160",
+        "manufacturers": "",
+        "installTime": "2020-12-12 11:21:30"
     },
     {
-      id: 20,
-      equipmentNumber: 'YT-1234568',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:16:21',
+        "id": 3,
+        "equipmentNumber": "JQ46676",
+        "equipmentName": "Hurco车削中心机械臂",
+        "workshop": "上海市浦东新区沪城环路1111号",
+        "equipmentMN": "TX90",
+        "manufacturers": "",
+        "installTime": "2020-12-12 09:34:56"
     },
     {
-      id: 21,
-      equipmentNumber: 'YT-1234568',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:16:21',
+        "id": 2,
+        "equipmentNumber": "YT-1234568",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:16:21"
     },
     {
-      id: 22,
-      equipmentNumber: 'YT-1234568',
-      equipmentName: '一体化污水处理设备',
-      workshop: '上海市嘉定区外冈镇恒定路1号',
-      equipmentMN: '#99-BS12345',
-      manufacturers: '中原联',
-      installTime: '2021-08-03 10:16:21',
+        "id": 1,
+        "equipmentNumber": "YT-1234567",
+        "equipmentName": "一体化污水处理设备",
+        "workshop": "上海市嘉定区外冈镇恒定路1号",
+        "equipmentMN": "#99-BS12345",
+        "manufacturers": "中原联",
+        "installTime": "2021-08-03 10:01:01"
     }
-  ]);
+]);
+  // 列表中最新的id，确保不会重复
+  const newId = useRef(22);
+  // 正在编辑的数据
+  const editRecord = useRef({});
   // 展示的数据
   const [tableData, setTableData] = useState({list: [], total: 0});
   // 搜索表单
   const [searchForm, setSearchForm] = useState({equipmentNumber: '', equipmentName: '', workshop: ''});
   // 分页
   const [pagination, setPagination] = useState({current: 1, pageSize: 10});
+  // 显示新增弹框
+  const [showModal, setShowModal] = useState(false);
+  // form表单绑定的对象实例
+  const [form] = Form.useForm();
 
 
   // 新增
   const add = () => {
-    console.log('add')
+    setShowModal(true);
   };
+
   // 删除
   const del = id => {
     const index = originalData.current.findIndex(v => v.id === id);
     originalData.current.splice(index, 1);
-    console.log(originalData.current)
     getList();
   };
+
   // 编辑
-  const edit = id => {
-    console.log('edit', id);
+  const edit = record => {
+    setShowModal(true);
+    editRecord.current = {...record};
+    form.setFieldsValue(record);
   };
+
   // 搜索
   const search = values => {
     setSearchForm({ ...values });
     setPagination({ ...pagination, current: 1 });
   };
+
   // 翻页
   const changePagination = pageNum => {
-    console.log(pageNum, pagination);
     const nextPagination = { ...pagination, current: pageNum };
     setPagination(nextPagination);
   };
+
   // 获取列表
   const getList = () => {
     const { equipmentNumber = '', equipmentName = '', workshop = '' } = searchForm;
     const { current, pageSize } = pagination;
+    // 筛选符合搜索条件的数据
     const newOrigin = originalData.current.filter(v => {
-      return v.equipmentNumber.includes(equipmentNumber)
-        && v.equipmentName.includes(equipmentName)
-        && v.workshop.includes(workshop);
+      const {
+        equipmentNumber: vEquipmentNumber = '',
+        equipmentName: vEquipmentName = '',
+        workshop: vWorkshop = ''
+      } = v;
+      return vEquipmentNumber.includes(equipmentNumber)
+        && vEquipmentName.includes(equipmentName)
+        && vWorkshop.includes(workshop);
     });
+    // 从符合条件的数据中截取当前页码应该显示的数据
     let newTableData = newOrigin.slice((current - 1) * pageSize, current * pageSize);
     // 有符合条件的数据，但是当前页码没有数据
     if (newOrigin.length !== 0 && newTableData.length === 0) {
@@ -312,6 +333,35 @@ const Equipment = () => {
     }
   };
 
+  // 点击弹框的确定按钮
+  const ok = async () => {
+    try {
+      const formValue = await form.validateFields();
+      if (editRecord.current.id) {
+        // 编辑逻辑
+        const index = originalData.current.findIndex(v => v.id === editRecord.current.id);
+        originalData.current.splice(index, 1, {...editRecord.current, ...formValue});
+      } else {
+        // 新增逻辑
+        const obj = { id: newId.current + 1, ...formValue, installTime: formatDate(Date.now())};
+        originalData.current.unshift(obj);
+        newId.current += 1;
+      }
+      form.resetFields();
+      setShowModal(false);
+      getList();
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  // 点击弹框的取消按钮
+  const cancel = () => {
+    form.resetFields();
+    setShowModal(false);
+  };
+
+  // 副作用函数，pagination改变时，重新获取表格显示的数据
   useEffect(() => {
     getList();
   }, [pagination]);
@@ -352,6 +402,49 @@ const Equipment = () => {
           onChange={changePagination}
           style={{marginTop: '20px'}}
         />
+      </div>
+      <div>
+        <Modal
+          title="新建"
+          width={600}
+          open={showModal}
+          onOk={ok}
+          onCancel={cancel}
+        >
+          <Form
+            form={form}
+            style={{marginRight: '100px'}}
+            labelCol={{span: 8}}
+            wrapperCol={{span: 16}}
+          >
+            <Form.Item
+              name="equipmentNumber"
+              label="设备编号"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="equipmentName"
+              label="设备名"
+              rules={[{required: true, message: '请输入设备名！'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="workshop"
+              label="所属车间"
+              rules={[{required: true, message: '请输入所属车间！'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item name="equipmentMN" label="设备型号">
+              <Input />
+            </Form.Item>
+            <Form.Item name="manufacturers" label="生产厂家">
+              <Input />
+            </Form.Item>
+          </Form>
+        </Modal>
       </div>
     </>
   )
